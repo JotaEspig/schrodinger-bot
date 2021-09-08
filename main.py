@@ -83,9 +83,7 @@ for filename in listdir('./scripts/cogs'):
         client.load_extension(f'scripts.cogs.{filename[:-3]}')
 
 #-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
-
-#BOT DISCORD
-
+#Runs the bot
 @client.event
 async def on_command_error(ctx, error) -> None:
     """Trata dos erros que acontecem durante o funcionamento do BOT
@@ -104,7 +102,4 @@ async def on_ready() -> None:
     print(f'{client.user.name} online')
     await client.change_presence(activity= discord.Activity(type= discord.ActivityType.listening, name= f'{PREFIX}help'))
 
-#-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
-
-#Inicia o BOT
 client.run(TOKEN)
