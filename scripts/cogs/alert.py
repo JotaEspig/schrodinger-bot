@@ -1,11 +1,10 @@
-#Discord
+# Discord
 from discord.ext import commands
 from discord.ext.commands.core import has_permissions
 from discord.ext.commands.errors import MissingPermissions
-#Modules
+# Modules
 from scripts.modules.alertsconfig import AlertManager
 from scripts.cogs.bot import _commands_help
-
 
 
 class Alert(commands.Cog):
@@ -33,8 +32,8 @@ class Alert(commands.Cog):
         if not isinstance(error, MissingPermissions):
             await ctx.send(_commands_help['set_alerta_atividade'])
         
-    @commands.command(aliases= ['SET_ALERTA_AULA', 'sa_aula', 'SA_AULA'])
-    @has_permissions(administrator= True)
+    @commands.command(aliases=['SET_ALERTA_AULA', 'sa_aula', 'SA_AULA'])
+    @has_permissions(administrator=True)
     async def set_alerta_aula(self, ctx, *, msg: str) -> None:
         alert_id = str(ctx.guild.id)
         try:
@@ -53,7 +52,7 @@ class Alert(commands.Cog):
         if not isinstance(error, MissingPermissions):
             await ctx.send(_commands_help['set_alerta_aula'])
 
-    @commands.command(aliases= ['RM_ALERTA_ATIVIDADE', 'rma_ativ', 'RMA_ATIV'])
+    @commands.command(aliases=['RM_ALERTA_ATIVIDADE', 'rma_ativ', 'RMA_ATIV'])
     async def rm_alerta_atividade(self, ctx) -> None:
         alert_id = str(ctx.author.id)
         if self.alert_manager.rm_alert(alert_id):
@@ -62,7 +61,7 @@ class Alert(commands.Cog):
         else:
             await ctx.message.add_reaction('❌')
 
-    @commands.command(aliases= ['RM_ALERTA_AULA', 'rma_aula', 'RMA_AULA'])
+    @commands.command(aliases=['RM_ALERTA_AULA', 'rma_aula', 'RMA_AULA'])
     @has_permissions(administrator= True)
     async def rm_alerta_aula(self, ctx) -> None:
         alert_id = str(ctx.guild.id)

@@ -1,4 +1,4 @@
-#Psycopg2
+# Psycopg2
 import psycopg2
 
 
@@ -9,13 +9,13 @@ class Connection:
 
     def __init__(self, hostname, dbname, usr, pwd) -> None:
         self._db = psycopg2.connect(
-            host= hostname,
-            database= dbname,
-            user= usr,
-            password= pwd
+            host=hostname,
+            database=dbname,
+            user=usr,
+            password=pwd
         )
 
-    def manage(self, sql) -> None:
+    def manage(self, sql) -> bool:
         """Vai manipular o banco de dados com o comando inserido
 
         Args:
@@ -32,10 +32,10 @@ class Connection:
 
         except:
             return False
-        
+
         return True
 
-    def consult(self, sql) -> None:
+    def consult(self, sql) -> list|None:
         """Vai consultar o banco de dados com o comando inserido
 
         Args:
@@ -44,18 +44,17 @@ class Connection:
         Returns:
             bool: Retorna a resposta do banco de dados ou retorna None caso aconteça algum erro
         """
-        response= None
         try:
             cur = self._db.cursor()
             cur.execute(sql)
             response = cur.fetchall()
             cur.close()
-        
+
         except:
             return None
 
         return response
-    
+
     def close(self) -> None:
         """Fecha o banco de dados
         """

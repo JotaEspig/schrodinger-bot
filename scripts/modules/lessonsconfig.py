@@ -1,4 +1,4 @@
-#Modules
+# Modules
 from scripts.modules.database import Connection
 
 
@@ -14,6 +14,7 @@ class Lesson:
     @property
     def _lesson_date(self) -> str:
         return self.lesson_date
+
     @_lesson_date.setter
     def _lesson_date(self, value: str) -> None:
         value = value.strip().lower()
@@ -28,6 +29,7 @@ class Lesson:
     @property
     def _lesson_time(self) -> str:
         return self.lesson_time
+
     @_lesson_time.setter
     def _lesson_time(self, value: str) -> None:
         value = value.strip().lower()
@@ -38,9 +40,6 @@ class Lesson:
             raise Exception('LT')
 
         self.lesson_time = value
-
-    def __eq__(self, obj: object) -> bool:
-        return self.lesson_id == obj.lesson_id
 
     def __repr__(self) -> str:
         return f'{self.subject}: {self._lesson_date} / {self._lesson_time}'

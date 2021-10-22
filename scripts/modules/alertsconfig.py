@@ -1,4 +1,4 @@
-#Modules
+# Modules
 from scripts.modules.database import Connection
 
 
@@ -11,6 +11,7 @@ class Alert:
     @property
     def _msg(self) -> str:
         return self.msg
+
     @_msg.setter
     def _msg(self, value: str) -> None:
         value = value.strip()
@@ -22,7 +23,11 @@ class Alert:
         self.msg = value
 
     def __eq__(self, obj: object) -> bool:
-        return self.alert_id == obj.lesson_id
+        if self.__class__ == obj.__class__:
+            return self.alert_id == obj.lesson_id
+
+        else:
+            return self.alert_id == obj
 
     def __repr__(self) -> str:
         return f'id:{self.alert_id}'
@@ -79,9 +84,8 @@ class AlertManager:
     def set_alert(self, alert_id: str, msg: str) -> bool:
         """Configura um alerta para o servidor ou usuário
 
-        Args:
-            alert_id (str): Id do alerta
-            msg (str): Mensagem que irá ser cadastrada, precisa conter a palavra \"&alerta&\" (é onde as variáveis do alerta vão ir) ou \"none\" (configura a mensagem para o padrão)
+        Args: alert_id (str): Id do alerta msg (str): Mensagem que irá ser cadastrada, precisa conter a palavra
+        \"&alerta&\" (é onde as variáveis do alerta vão ir) ou \"none\" (configura a mensagem para o padrão)
 
         Returns:
             bool: True ou False

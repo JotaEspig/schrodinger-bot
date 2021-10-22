@@ -1,6 +1,6 @@
-#Discord
+# Discord
 from discord.ext import commands
-#Modules
+# Modules
 from scripts.modules.lessonsconfig import LessonManager
 from scripts.cogs.bot import _commands_help
 
@@ -11,7 +11,7 @@ class Lesson(commands.Cog):
         self.client = client
         self.lesson_manager = LessonManager()
 
-    @commands.command(aliases= ['ADD_AULA'])
+    @commands.command(aliases=['ADD_AULA'])
     async def add_aula(self, ctx, subject: str, url: str, lesson_date: str, lesson_time: str) -> None:
         try:
             if self.lesson_manager.add_lesson(subject, url, lesson_date, lesson_time, str(ctx.guild.id)):
