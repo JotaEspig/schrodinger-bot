@@ -30,7 +30,7 @@ class Alert:
             return self.alert_id == obj
 
     def __repr__(self) -> str:
-        return f'id:{self.alert_id}'
+        return f'<id:{self.alert_id} | message:{self.msg}>'
 
 
 class AlertManager:

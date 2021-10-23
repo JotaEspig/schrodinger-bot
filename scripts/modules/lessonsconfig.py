@@ -43,7 +43,7 @@ class Lesson:
         self.lesson_time = value
 
     def __repr__(self) -> str:
-        return f'{self.subject}: {self._lesson_date} / {self._lesson_time}'
+        return f'<{self.subject}: {self._lesson_date} / {self._lesson_time}>'
 
 
 class LessonManager:
@@ -68,9 +68,23 @@ class LessonManager:
         lesson_id = int(lesson_id)
         response = self._con.consult(f'SELECT * FROM lesson WHERE lessonID={lesson_id}')
         if len(response) > 0:
-            response = response[0]
-            lesson = Lesson(response[1], response[2], response[3], response[4], response[5])
+            info = response[0]
+            lesson = Lesson(info[1], info[2], info[3], info[4], info[5])
             return lesson
+
+    def list_lessons(self, guild_id: str) -> list[Lesson] | None:
+        response = self._con.consult(f'SELECT * FROM guild WHERE guildID=\'{guild_id}\'')
+        if len(response) > 0:
+            response = self._con.consult(f'SELECT * FROM lesson WHERE guildID=\'{guild_id}\'')
+        else:
+            if not self._con.manage(f'INSERT INTO guild(guildID) VALUES(\'{guild_id}\')'):
+                return None
+
+        for index, info in enumerate(response):
+            lesson = Lesson(info[1], info[2], info[3], info[4], info[5])
+            response[index] = lesson
+
+        return response
     
     def rm_lesson(self, lesson_id: int) -> bool:
         """Removes a lesson fro mthe database
