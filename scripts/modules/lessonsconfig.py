@@ -1,5 +1,8 @@
+# Standard libraries
+from datetime import datetime
 # Modules
 from scripts.modules.database import Connection
+from scripts.modules.datetimeerrors import *
 
 
 class Lesson:
@@ -17,14 +20,17 @@ class Lesson:
 
     @_lesson_date.setter
     def _lesson_date(self, value: str) -> None:
-        # TODO: Use datatime
         value = value.strip().lower()
-        if value.count('-') != 2:
-            raise Exception('LD')
+        try:
+            datetime.strptime(value, "%Y-%m-%d")  # If it raises a error, the date format is wrong
+            is_correct = True
 
-        if len(value) != 10:
-            raise Exception('LD')
-        
+        except ValueError:
+            is_correct = False
+
+        if not is_correct:
+            raise InvalidDate("Expected: \"YYYY-MM-DD\"", f"Got: {value}")
+
         self.lesson_date = value
 
     @property
@@ -34,11 +40,15 @@ class Lesson:
     @_lesson_time.setter
     def _lesson_time(self, value: str) -> None:
         value = value.strip().lower()
-        if not 1 <= value.count(':') <= 2:
-            raise Exception('LT')
+        try:
+            datetime.strptime(value, "%H:%M")  # If it raises a error, the time format is wrong
+            is_correct = True
 
-        if not 5 <= len(value) <= 8:
-            raise Exception('LT')
+        except ValueError:
+            is_correct = False
+
+        if not is_correct:
+            raise InvalidTime("Expected: \"hh:mm\"", f"Got: {value}")
 
         self.lesson_time = value
 

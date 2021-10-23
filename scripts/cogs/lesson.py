@@ -21,10 +21,10 @@ class Lesson(commands.Cog):
                 await ctx.message.add_reaction('❌')
 
         except Exception as error:
-            if error.args[0] == 'LD':
+            if error.args[0] == 'Invalid date format':
                 await ctx.send('Formato de data inválido')
-            elif error.args[0] == 'LT':
-                await ctx.send('Formato de tempo inválido')
+            elif error.args[0] == 'Invalid time format':
+                await ctx.send('Formato de horário inválido')
     
     @commands.command()
     async def rm_aula(self, ctx, lesson_id: int) -> None:

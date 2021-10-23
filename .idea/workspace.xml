@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f032b1a0-c2ff-4cd3-aca0-bb0acc62e798" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/modules/alertsconfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/modules/alertsconfig.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cogs/lesson.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cogs/lesson.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/modules/lessonsconfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/modules/lessonsconfig.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -14,8 +14,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="Setup Script" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
