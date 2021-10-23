@@ -85,6 +85,7 @@ async def shutdown(ctx) -> None:
 
     :param ctx: Context provided by Discord API
     """
+    await ctx.message.add_reaction('✅')
     await client.logout()
 
 
