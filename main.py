@@ -13,7 +13,7 @@ with open('config.json', 'r') as file:
     config = json.load(file)
     TOKEN, PREFIX = config['token'], config['prefix']
 
-# Configure the Bot
+# Configures the Bot
 intents = discord.Intents(
     messages=True,
     guilds=True,
@@ -31,9 +31,10 @@ def is_it_me(ctx) -> bool:
     :param ctx: Context provided by Discord API
     """
     owners = [
-        720686657950711909,
-        621048999989870592,
-        335554042736541698
+        720686657950711909,  # JVE
+        621048999989870592,  # IG
+        335554042736541698,  # FJH
+        609516579549347863   # LRB
     ]
     return ctx.author.id in owners
 
@@ -98,9 +99,11 @@ async def on_command_error(ctx, error) -> None:
 @client.event
 async def on_ready() -> None:
     print(f'{client.user.name} online')
-    await client.change_presence(activity=discord.Activity(
-        type=discord.ActivityType.listening,
-        name=f'{PREFIX}help')
+    await client.change_presence(
+        activity=discord.Activity(
+            type=discord.ActivityType.listening,
+            name=f'{PREFIX}help'
+        )
     )
 
 

@@ -1,17 +1,12 @@
-# Psycopg2
-import psycopg2
+# Psycopg
+import psycopg
 
 
 class Connection:
     _db = None
 
     def __init__(self, hostname, dbname, usr, pwd) -> None:
-        self._db = psycopg2.connect(
-            host=hostname,
-            database=dbname,
-            user=usr,
-            password=pwd
-        )
+        self._db = psycopg.connect(f"host={hostname} dbname={dbname} user={usr} password={pwd}")
 
     def manage(self, sql: str) -> bool:
         """Manages the database with a command

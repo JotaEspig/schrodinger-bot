@@ -13,7 +13,7 @@ class Alert(commands.Cog):
         self.client = client
         self.alert_manager = AlertManager()
 
-    @commands.command(aliases= ['SET_ALERTA_ATIVIDADE', 'sa_ativ', 'SA_ATIV'])
+    @commands.command(aliases=['SET_ALERTA_ATIVIDADE', 'sa_ativ', 'SA_ATIV'])
     async def set_alerta_atividade(self, ctx, *, msg: str) -> None:
         alert_id = str(ctx.author.id)
         try:

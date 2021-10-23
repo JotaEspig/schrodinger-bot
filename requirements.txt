@@ -1,2 +1,2 @@
 discord
-psycopg2
+psycopg

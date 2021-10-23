@@ -57,7 +57,7 @@ class LessonManager:
             'postgres'
         )
     
-    def get_lesson(self, lesson_id: int) -> Lesson | None:
+    def get_lesson(self, lesson_id: int) -> Lesson:
         """Gets a lesson from the database
 
         :param lesson_id: lesson's ID
