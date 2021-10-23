@@ -78,9 +78,9 @@ async def reload(ctx, extension: str) -> None:
     await ctx.send(f'\"{extension}\" recarregado')
 
 
-@client.command(aliases=['STOP'])
+@client.command(aliases=['stop', 'STOP', 'logout', 'LOGOUT', 'SHUTDOWN'])
 @commands.check(is_owner)
-async def stop(ctx) -> None:
+async def shutdown(ctx) -> None:
     """Logouts the bos
 
     :param ctx: Context provided by Discord API
