@@ -34,7 +34,7 @@ class Alert:
 
 
 class AlertManager:
-    """Gerencia os alertas do sistema
+    """Manage the alerts
     """
     def __init__(self) -> None:
         self._con = Connection(
@@ -45,13 +45,12 @@ class AlertManager:
         )
 
     def get_alert(self, alert_id: str) -> Alert:
-        """Retorna um alerta existente no banco de dados
+        """Gets an alert from the database
 
-        Args:
-            alert_id (str): Id do alerta
+        :param alert_id: alert's ID
+        :type alert_id: str
 
-        Returns:
-            Alert: Objeto de classe Alert ou None
+        :return: object of the class "alert" or None
         """
         alert_id = str(alert_id)
         response = self._con.consult(f'SELECT * FROM alert WHERE alertID=\'{alert_id}\'')
@@ -61,13 +60,12 @@ class AlertManager:
             return alert
 
     def rm_alert(self, alert_id: str) -> bool:
-        """Remove o alerta do banco de dados
+        """Remove the alert from the database
 
-        Args:
-            alert_id (str): Id do alerta
+        :param alert_id: alert's ID
+        :type alert_id: str
 
-        Returns:
-            bool: True ou False
+        :return: True or False
         """
         alert_id = str(alert_id)
         alert = AlertManager.get_alert(self, alert_id)
@@ -82,13 +80,15 @@ class AlertManager:
         return True
 
     def set_alert(self, alert_id: str, msg: str) -> bool:
-        """Configura um alerta para o servidor ou usuário
+        """Sets an alert for a server or a user
 
-        Args: alert_id (str): Id do alerta msg (str): Mensagem que irá ser cadastrada, precisa conter a palavra
-        \"&alerta&\" (é onde as variáveis do alerta vão ir) ou \"none\" (configura a mensagem para o padrão)
+        :param alert_id: alert's ID.
+        :type alert_id: str
+        :param msg: The message that will be registered, needs to have the word
+        "&alerta&" (it's the location that the alert object will be). If you want to reset your alert, write: "none"
+        :type msg: str
 
-        Returns:
-            bool: True ou False
+        :return: True or false
         """
         alert_id = str(alert_id)
         alert = Alert(alert_id, msg)

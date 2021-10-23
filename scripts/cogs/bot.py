@@ -28,13 +28,11 @@ class Bot(commands.Cog):
 
     @staticmethod
     def is_it_me(ctx) -> bool:
-        """Verifica se o autor da mensagem é um dos donos do BOT
+        """Check if the message's author is one of the schrodinger bot's owners
 
-        Args:
-            ctx (discord.ext.commands.context.Context): Contexto passado pela API do discord
+        :param ctx: Context provided by Discord API
 
-        Returns:
-            bool: True se o id do autor da mensagem é igual a um dos donos
+        :return: True if the id of the author is in the list owners, else false
         """
         owners = [
             720686657950711909,

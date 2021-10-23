@@ -17,6 +17,7 @@ class Lesson:
 
     @_lesson_date.setter
     def _lesson_date(self, value: str) -> None:
+        # TODO: Use datatime
         value = value.strip().lower()
         if value.count('-') != 2:
             raise Exception('LD')
@@ -46,7 +47,7 @@ class Lesson:
 
 
 class LessonManager:
-    """Gerenciador de aulas
+    """Manages the lessons
     """
     def __init__(self) -> None:
         self._con = Connection(
@@ -56,14 +57,13 @@ class LessonManager:
             'postgres'
         )
     
-    def get_lesson(self, lesson_id: int) -> Lesson:
-        """Retorna uma aula do banco de dados
+    def get_lesson(self, lesson_id: int) -> Lesson | None:
+        """Gets a lesson from the database
 
-        Args:
-            lesson_id (int): id da aula
+        :param lesson_id: lesson's ID
+        :type lesson_id: int
 
-        Returns:
-            Lesson: Objeto de classe Lesson ou um None
+        :return: a object of the class "Lesson" or None
         """
         lesson_id = int(lesson_id)
         response = self._con.consult(f'SELECT * FROM lesson WHERE lessonID={lesson_id}')
@@ -73,13 +73,12 @@ class LessonManager:
             return lesson
     
     def rm_lesson(self, lesson_id: int) -> bool:
-        """Remove uma aula do banco de dados
+        """Removes a lesson fro mthe database
 
-        Args:
-            lesson_id (int): Id da aula
+        :param lesson_id: lesson's ID
+        :type lesson_id: int
 
-        Returns:
-            bool: True ou False
+        :return: True or false
         """
         lesson_id = int(lesson_id)
         lesson = LessonManager.get_lesson(self, lesson_id)
@@ -94,23 +93,28 @@ class LessonManager:
         return True
 
     def add_lesson(self, subject: str, url: str, lesson_date: str, lesson_time: str, guild_id: str) -> bool:
-        """Adiciona uma aula no banco de dados
+        """Adds a lesson in database
 
-        Args:
-            subject (str): Disciplina da aula
-            url (str): Link da aula
-            lesson_date (str): Dia da aula/Mês da aula/Ano da aula
-            lesson_time (str): Horário da aula
-            guild_id (str): Id do servidor
+        :param subject: Lesson's subject
+        :type subject: str
+        :param url: lesson's url
+        :type url: str
+        :param lesson_date: lesson's data (YYYY-MM-DD)
+        :type lesson_date: str
+        :param lesson_time: Lesson's time
+        :type lesson_time: str
+        :param guild_id: Server's ID
+        :type guild_id: str
 
-        Returns:
-            bool: True ou False
+        :return: True or False
         """
+        # TODO: Transform this to a method
         response = self._con.consult(f'SELECT * FROM guild WHERE guildID=\'{guild_id}\'')
         if len(response) == 0:
             if not self._con.manage(f'INSERT INTO guild(guildID) VALUES(\'{guild_id}\')'):
                 return False
 
+        # TODO: add checker (if lesson already exists in database: get_lesson)
         lesson = Lesson(subject, url, lesson_date, lesson_time, guild_id)
         if lesson is not None:
             sql = f"""INSERT INTO lesson(subject, url, lessonDate, lessonTime, guildID) 

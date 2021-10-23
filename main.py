@@ -27,8 +27,8 @@ client = commands.Bot(command_prefix=PREFIX, intents=intents)
 def is_it_me(ctx) -> bool:
     """
     Check if the author of the message is one of the owners of the Bot
-    Args:
-        ctx (discord.ext.commands.context.Context): Context provided by Discord API
+
+    :param ctx: Context provided by Discord API
     """
     owners = [
         720686657950711909,
@@ -43,9 +43,9 @@ def is_it_me(ctx) -> bool:
 async def load(ctx, extension: str) -> None:
     """
     Enable a bot's cog
-    Args:
-        ctx (discord.ext.commands.context.Context): Context provided by Discord API
-        extension (str): cog's name
+
+    :param ctx: Context provided by Discord API
+    :param extension: cog's name
     """
 
     client.load_extension(f'cogs.{extension}')
@@ -57,9 +57,8 @@ async def load(ctx, extension: str) -> None:
 async def unload(ctx, extension: str) -> None:
     """Disable a bot's cog
 
-    Args:
-        ctx (discord.ext.commands.context.Context): Context provided by Discord API
-        extension (str): cog's name
+    :param ctx: Context provided by Discord API
+    :param extension: cog's name
     """
     client.unload_extension(f'cogs.{extension}')
     await ctx.send(f'\"{extension}\" descarregado')
@@ -70,9 +69,8 @@ async def unload(ctx, extension: str) -> None:
 async def reload(ctx, extension: str) -> None:
     """Reload a bot's cog
 
-    Args:
-        ctx (discord.ext.commands.context.Context): Context provided by Discord API
-        extension (str): cog's name
+    :param ctx: Context provided by Discord API
+    :param extension: cog's name
     """
     client.unload_extension(f'cogs.{extension}')
     client.load_extension(f'cogs.{extension}')
@@ -90,9 +88,8 @@ for filename in listdir('./scripts/cogs'):
 async def on_command_error(ctx, error) -> None:
     """Treats the errors that happen during the operation of the bot
 
-    Args:
-        ctx (discord.ext.commands.context.Context): Context provided by Discord API
-        error: Error
+    :param ctx: Context provided by Discord API
+    :param error: Error
     """
     if isinstance(error, MissingPermissions):
         await ctx.send(f':hand_splayed: Você não tem permissão para usar esse comando\n:hand_splayed: {error}')

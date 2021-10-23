@@ -3,8 +3,6 @@ import psycopg2
 
 
 class Connection:
-    """Realiza a conexão com o banco de dados
-    """
     _db = None
 
     def __init__(self, hostname, dbname, usr, pwd) -> None:
@@ -15,14 +13,13 @@ class Connection:
             password=pwd
         )
 
-    def manage(self, sql) -> bool:
-        """Vai manipular o banco de dados com o comando inserido
+    def manage(self, sql: str) -> bool:
+        """Manages the database with a command
 
-        Args:
-            sql (str): Comando para ser executado
+        :param sql: Command to be executed
+        :type sql: str
 
-        Returns:
-            bool: True para quando não há problemas e False para quando ocorreu problemas
+        :return: True if all did well, else False
         """
         try:
             cur = self._db.cursor()
@@ -35,14 +32,13 @@ class Connection:
 
         return True
 
-    def consult(self, sql) -> list|None:
+    def consult(self, sql) -> list | None:
         """Vai consultar o banco de dados com o comando inserido
 
-        Args:
-            sql (str): Comando para ser executado
+        :param sql: Command to be executed
+        :type sql: str
 
-        Returns:
-            bool: Retorna a resposta do banco de dados ou retorna None caso aconteça algum erro
+        :return: a response from the database or None if some error has occurred
         """
         try:
             cur = self._db.cursor()
@@ -56,7 +52,7 @@ class Connection:
         return response
 
     def close(self) -> None:
-        """Fecha o banco de dados
+        """Closes the database
         """
         self._db.close()
 
