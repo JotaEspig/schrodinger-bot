@@ -24,7 +24,7 @@ intents = discord.Intents(
 client = commands.Bot(command_prefix=PREFIX, intents=intents)
 
 
-def is_it_me(ctx) -> bool:
+def is_owner(ctx) -> bool:
     """
     Check if the author of the message is one of the owners of the Bot
 
@@ -40,7 +40,7 @@ def is_it_me(ctx) -> bool:
 
 
 @client.command(aliases=['LOAD'])
-@commands.check(is_it_me)
+@commands.check(is_owner)
 async def load(ctx, extension: str) -> None:
     """
     Enable a bot's cog
@@ -54,7 +54,7 @@ async def load(ctx, extension: str) -> None:
 
 
 @client.command(aliases=['UNLOAD'])
-@commands.check(is_it_me)
+@commands.check(is_owner)
 async def unload(ctx, extension: str) -> None:
     """Disable a bot's cog
 
@@ -66,7 +66,7 @@ async def unload(ctx, extension: str) -> None:
 
 
 @client.command(aliases=['RELOAD'])
-@commands.check(is_it_me)
+@commands.check(is_owner)
 async def reload(ctx, extension: str) -> None:
     """Reload a bot's cog
 
@@ -77,10 +77,15 @@ async def reload(ctx, extension: str) -> None:
     client.load_extension(f'cogs.{extension}')
     await ctx.send(f'\"{extension}\" recarregado')
 
-# Load all cogs automatically
-for filename in listdir('./scripts/cogs'):
-    if filename.endswith('.py'):
-        client.load_extension(f'scripts.cogs.{filename[:-3]}')
+
+@client.command(aliases=['STOP'])
+@commands.check(is_owner)
+async def stop(ctx) -> None:
+    """Logouts the bos
+
+    :param ctx: Context provided by Discord API
+    """
+    await client.logout()
 
 
 # -X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
@@ -108,4 +113,9 @@ async def on_ready() -> None:
 
 
 if __name__ == '__main__':
+    # Load all cogs automatically
+    for filename in listdir('./scripts/cogs'):
+        if filename.endswith('.py'):
+            client.load_extension(f'scripts.cogs.{filename[:-3]}')
+
     client.run(TOKEN)

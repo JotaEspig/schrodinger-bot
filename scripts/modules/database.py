@@ -22,13 +22,14 @@ class Connection:
             cur.close()
             self._db.commit()
 
-        except:
+        except Exception as e:
+            print(e)
             return False
 
         return True
 
     def consult(self, sql) -> list | None:
-        """Vai consultar o banco de dados com o comando inserido
+        """Consults the database with a command
 
         :param sql: Command to be executed
         :type sql: str
@@ -41,7 +42,8 @@ class Connection:
             response = cur.fetchall()
             cur.close()
 
-        except:
+        except Exception as e:
+            print(e)
             return None
 
         return response

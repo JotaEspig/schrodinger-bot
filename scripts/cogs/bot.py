@@ -25,21 +25,6 @@ class Bot(commands.Cog):
     
     def __init__(self, client) -> None:
         self.client = client
-
-    @staticmethod
-    def is_it_me(ctx) -> bool:
-        """Check if the message's author is one of the schrodinger bot's owners
-
-        :param ctx: Context provided by Discord API
-
-        :return: True if the id of the author is in the list owners, else false
-        """
-        owners = [
-            720686657950711909,
-            621048999989870592,
-            335554042736541698
-        ]
-        return ctx.author.id in owners
     
     @commands.command(aliases=['PING'])
     async def ping(self, ctx) -> None:

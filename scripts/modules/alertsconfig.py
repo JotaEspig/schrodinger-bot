@@ -95,7 +95,6 @@ class AlertManager:
         if alert is not None:
             if AlertManager.rm_alert(self, alert.alert_id):
                 sql = f'INSERT INTO alert(alertID, msg) VALUES(\'{alert.alert_id}\', \'{alert.msg}\')'
-                if self._con.manage(sql):
-                    return True
+                return self._con.manage(sql)
 
         return False
