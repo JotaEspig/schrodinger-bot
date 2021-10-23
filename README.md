@@ -5,3 +5,4 @@
     <li><p>Use <a href="https://www.postgresql.org/">Postgresql</a> as primary database 
     (psycopg2 in Python)</p></li>
 </ul>
+<p>Observation: Messages sent by schrodinger bot are in portuguese.</p>
