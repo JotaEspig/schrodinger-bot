@@ -11,6 +11,13 @@ class Lesson(commands.Cog):
         self.client = client
         self.lesson_manager = LessonManager()
 
+    @commands.command(aliases=['LIST_AULAS'])
+    async def list_aulas(self, ctx) -> None:
+        guild_id = str(ctx.guild.id)
+        response = self.lesson_manager.list_lessons(guild_id)
+        for lesson in response:
+            await ctx.send(f'{lesson.id}: {lesson}')
+
     @commands.command(aliases=['ADD_AULA'])
     async def add_aula(self, ctx, subject: str, url: str, lesson_date: str, lesson_time: str) -> None:
         try:
@@ -26,7 +33,7 @@ class Lesson(commands.Cog):
             elif error.args[0] == 'Invalid time format':
                 await ctx.send('Formato de horário inválido')
     
-    @commands.command()
+    @commands.command(aliases=['RM_AULA'])
     async def rm_aula(self, ctx, lesson_id: int) -> None:
         if self.lesson_manager.rm_lesson(lesson_id):
             await ctx.message.add_reaction('✅')

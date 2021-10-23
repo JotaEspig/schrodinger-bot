@@ -17,8 +17,9 @@ class Alert:
         value = value.strip()
         if value == 'none':
             value = '&alerta&'
+
         if '&alerta&' not in value:
-            raise Exception('AM')
+            raise Exception('AM')  # 'AM' means 'alert tag missing'
 
         self.msg = value
 

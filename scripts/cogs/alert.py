@@ -24,7 +24,7 @@ class Alert(commands.Cog):
                 await ctx.message.add_reaction('❌')
 
         except Exception as error:
-            if error.args[0] == 'AM':
+            if error.args[0] == 'AM':  # 'AM' means 'alert tag missing'
                 await ctx.send('Digite &alerta&')
 
     @set_alerta_atividade.error

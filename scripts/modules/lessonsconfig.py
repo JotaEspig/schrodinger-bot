@@ -8,6 +8,7 @@ from scripts.modules.datetimeerrors import *
 class Lesson:
 
     def __init__(self, subject: str, url: str, lesson_date: str, lesson_time: str, guild_id: str) -> None:
+        self.id = None
         self.subject = str(subject)
         self.url = str(url).strip().lower()
         self._lesson_date = str(lesson_date)
@@ -48,7 +49,15 @@ class Lesson:
             is_correct = False
 
         if not is_correct:
-            raise InvalidTime("Expected: \"hh:mm\"", f"Got: {value}")
+            try:
+                datetime.strptime(value, "%H:%M:%S")
+                is_correct = True
+
+            except ValueError:  # Check the time format again, but now with the postgres time format
+                is_correct = False
+
+            if not is_correct:
+                raise InvalidTime("Expected: \"hh:mm\"", f"Got: {value}")
 
         self.lesson_time = value
 
@@ -66,7 +75,22 @@ class LessonManager:
             'postgres',
             'postgres'
         )
-    
+
+    def check_guild_id(self, guild_id: str) -> bool:
+        """
+        Will check if the guild ID exists in the database, and if not, it will add it
+
+        :param guild_id: guild's ID
+        :type guild_id: str
+        :return: True or False
+        """
+        response = self._con.consult(f'SELECT * FROM guild WHERE guildID=\'{guild_id}\'')
+        if len(response) == 0:
+            if not self._con.manage(f'INSERT INTO guild(guildID) VALUES(\'{guild_id}\')'):
+                return False
+
+        return True
+
     def get_lesson(self, lesson_id: int) -> Lesson:
         """Gets a lesson from the database
 
@@ -80,24 +104,23 @@ class LessonManager:
         if len(response) > 0:
             info = response[0]
             lesson = Lesson(info[1], info[2], info[3], info[4], info[5])
+            lesson.id = info[0]
             return lesson
 
     def list_lessons(self, guild_id: str) -> list[Lesson] | None:
-        response = self._con.consult(f'SELECT * FROM guild WHERE guildID=\'{guild_id}\'')
-        if len(response) > 0:
-            response = self._con.consult(f'SELECT * FROM lesson WHERE guildID=\'{guild_id}\'')
-        else:
-            if not self._con.manage(f'INSERT INTO guild(guildID) VALUES(\'{guild_id}\')'):
-                return None
+        if not self.check_guild_id(guild_id):
+            return None
 
+        response = self._con.consult(f'SELECT * FROM lesson WHERE guildID=\'{guild_id}\'')
         for index, info in enumerate(response):
             lesson = Lesson(info[1], info[2], info[3], info[4], info[5])
+            lesson.id = info[0]
             response[index] = lesson
 
         return response
     
     def rm_lesson(self, lesson_id: int) -> bool:
-        """Removes a lesson fro mthe database
+        """Removes a lesson from the database
 
         :param lesson_id: lesson's ID
         :type lesson_id: int
