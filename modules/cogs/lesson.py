@@ -1,8 +1,8 @@
 # Discord
 from discord.ext import commands
 # Modules
-from scripts.modules.lessonsconfig import LessonManager
-from scripts.cogs.bot import _commands_help
+from modules.scripts.lessonsconfig import LessonManager
+from modules.cogs.bot import _commands_help
 
 
 class Lesson(commands.Cog):

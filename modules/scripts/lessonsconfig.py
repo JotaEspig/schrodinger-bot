@@ -1,8 +1,8 @@
 # Standard libraries
 from datetime import datetime
 # Modules
-from scripts.modules.database import Connection
-from scripts.modules.datetimeerrors import *
+from modules.scripts.database import Connection
+from modules.scripts.datetimeerrors import *
 
 
 class Lesson:

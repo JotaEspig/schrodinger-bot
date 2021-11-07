@@ -26,7 +26,7 @@ client = commands.Bot(command_prefix=PREFIX, intents=intents)
 
 def is_owner(ctx) -> bool:
     """
-    Check if the author of the message is one of the owners of the Bot
+    Checks if the author of the message is one of the owners of the Bot
 
     :param ctx: Context provided by Discord API
     """
@@ -43,45 +43,45 @@ def is_owner(ctx) -> bool:
 @commands.check(is_owner)
 async def load(ctx, extension: str) -> None:
     """
-    Enable a bot's cog
+    Enables a bot's cog
 
     :param ctx: Context provided by Discord API
     :param extension: cog's name
     """
 
-    client.load_extension(f'cogs.{extension}')
+    client.load_extension(f'modules.cogs.{extension}')
     await ctx.send(f'\"{extension}\" carregado')
 
 
 @client.command(aliases=['UNLOAD'])
 @commands.check(is_owner)
 async def unload(ctx, extension: str) -> None:
-    """Disable a bot's cog
+    """Disables a bot's cog
 
     :param ctx: Context provided by Discord API
     :param extension: cog's name
     """
-    client.unload_extension(f'cogs.{extension}')
+    client.unload_extension(f'modules.cogs.{extension}')
     await ctx.send(f'\"{extension}\" descarregado')
 
 
 @client.command(aliases=['RELOAD'])
 @commands.check(is_owner)
 async def reload(ctx, extension: str) -> None:
-    """Reload a bot's cog
+    """Reloads a bot's cog
 
     :param ctx: Context provided by Discord API
     :param extension: cog's name
     """
-    client.unload_extension(f'cogs.{extension}')
-    client.load_extension(f'cogs.{extension}')
+    client.unload_extension(f'modules.cogs.{extension}')
+    client.load_extension(f'modules.cogs.{extension}')
     await ctx.send(f'\"{extension}\" recarregado')
 
 
 @client.command(aliases=['stop', 'STOP', 'logout', 'LOGOUT', 'SHUTDOWN'])
 @commands.check(is_owner)
 async def shutdown(ctx) -> None:
-    """Logouts the bos
+    """Logouts the bot
 
     :param ctx: Context provided by Discord API
     """
@@ -115,8 +115,8 @@ async def on_ready() -> None:
 
 if __name__ == '__main__':
     # Load all cogs automatically
-    for filename in listdir('./scripts/cogs'):
+    for filename in listdir('./modules/cogs'):
         if filename.endswith('.py'):
-            client.load_extension(f'scripts.cogs.{filename[:-3]}')
+            client.load_extension(f'modules.cogs.{filename[:-3]}')
 
     client.run(TOKEN)

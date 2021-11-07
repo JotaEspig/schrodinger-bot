@@ -1,5 +1,5 @@
 # Modules
-from scripts.modules.database import Connection
+from modules.scripts.database import Connection
 
 
 class Alert:

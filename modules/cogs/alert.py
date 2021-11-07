@@ -3,8 +3,8 @@ from discord.ext import commands
 from discord.ext.commands.core import has_permissions
 from discord.ext.commands.errors import MissingPermissions
 # Modules
-from scripts.modules.alertsconfig import AlertManager
-from scripts.cogs.bot import _commands_help
+from modules.scripts.alertsconfig import AlertManager
+from modules.cogs.bot import _commands_help
 
 
 class Alert(commands.Cog):
