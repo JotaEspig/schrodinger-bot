@@ -170,3 +170,6 @@ class LessonManager:
                 return True
         
         return False
+
+    def update_lesson(self, lesson_id, subject: str, url: str, lesson_date: str, lesson_time: str) -> bool:
+        raise NotImplementedError()  # TODO implement update_lesson

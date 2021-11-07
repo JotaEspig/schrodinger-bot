@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f032b1a0-c2ff-4cd3-aca0-bb0acc62e798" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cogs/alert.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cogs/alert.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cogs/lesson.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cogs/lesson.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/modules/alertsconfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/modules/alertsconfig.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/modules/lessonsconfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/modules/lessonsconfig.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,6 +20,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1zuIOnlUxPxqtQVAbFwO5YE4tMQ" />
   <component name="ProjectViewState">
