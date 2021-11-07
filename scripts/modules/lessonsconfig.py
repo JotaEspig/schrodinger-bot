@@ -155,13 +155,9 @@ class LessonManager:
 
         :return: True or False
         """
-        # TODO: Transform this to a method
-        response = self._con.consult(f'SELECT * FROM guild WHERE guildID=\'{guild_id}\'')
-        if len(response) == 0:
-            if not self._con.manage(f'INSERT INTO guild(guildID) VALUES(\'{guild_id}\')'):
-                return False
+        if not self.check_guild_id(guild_id):
+            return False
 
-        # TODO: add checker (if lesson already exists in database: get_lesson)
         lesson = Lesson(subject, url, lesson_date, lesson_time, guild_id)
         if lesson is not None:
             sql = f"""INSERT INTO lesson(subject, url, lessonDate, lessonTime, guildID) 
