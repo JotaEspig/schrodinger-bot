@@ -114,8 +114,19 @@ class LessonManager:
         response = self._con.consult(f'SELECT * FROM lesson WHERE guildID=\'{guild_id}\'')
         for index, info in enumerate(response):
             lesson = Lesson(info[1], info[2], info[3], info[4], info[5])
-            lesson.id = info[0]
-            response[index] = lesson
+            if lesson is not None:
+                lesson.id = info[0]
+                response[index] = lesson
+
+        return response
+
+    def list_all_lessons(self) -> list[Lesson] | None:
+        response = self._con.consult(f'SELECT * FROM lesson')
+        for index, info in enumerate(response):
+            lesson = Lesson(info[1], info[2], info[3], info[4], info[5])
+            if lesson is not None:
+                lesson.id = info[0]
+                response[index] = lesson
 
         return response
     
