@@ -3,15 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="f032b1a0-c2ff-4cd3-aca0-bb0acc62e798" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cogs/alert.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/cogs/alert.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cogs/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/cogs/bot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cogs/lesson.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/cogs/lesson.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/modules/activitysconfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/scripts/activitysconfig.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/modules/alertsconfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/scripts/alertsconfig.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/modules/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/scripts/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/modules/datetimeerrors.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/scripts/datetimeerrors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/modules/lessonsconfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/scripts/lessonsconfig.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/cogs/alert.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/cogs/alert.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/cogs/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/cogs/bot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/cogs/lesson.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/cogs/lesson.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/scripts/lessonsconfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/scripts/lessonsconfig.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,5 +109,12 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="self.client.get_guild(guild_id)" language="Python" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

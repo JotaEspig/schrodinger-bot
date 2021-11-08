@@ -1,15 +1,38 @@
 # Discord
 from discord.ext import commands
+from discord.ext import tasks
 # Modules
 from modules.scripts.lessonsconfig import LessonManager
+from modules.scripts.alertsconfig import AlertManager
 from modules.cogs.bot import _commands_help
 
 
 class Lesson(commands.Cog):
     
-    def __init__(self, client) -> None:
+    def __init__(self, client: commands.Bot) -> None:
         self.client = client
         self.lesson_manager = LessonManager()
+        self.alert_manager = AlertManager()
+        self.check_and_send.start()
+        self.is_first_run = True
+
+    @tasks.loop(minutes=1)
+    async def check_and_send(self) -> None:
+        if self.is_first_run:
+            self.is_first_run = False
+            return
+
+        all_lessons = self.lesson_manager.list_all_lessons()
+        if len(all_lessons) > 0:
+            for lesson in all_lessons:
+                guild_id = int(lesson.guild_id)
+                guild = self.client.get_guild(guild_id)
+                members = guild.members
+                for member in members:
+                    member_alert = self.alert_manager.get_alert(member.id)
+                    msg_to_send = member_alert.msg.replace("&alerta&", lesson)
+                    await member.send(msg_to_send)
+                    # TODO Improve this A LOT... This is a very bad look shit
 
     @commands.command(aliases=['LIST_AULAS'])
     async def list_aulas(self, ctx) -> None:
