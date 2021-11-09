@@ -16,7 +16,7 @@ class Alert(commands.Cog):
     @commands.command(aliases=['SET_ALERTA'])
     @has_permissions(administrator=True)
     async def set_alerta(self, ctx, *, msg: str) -> None:
-        alert_id = str(ctx.guild.id)
+        alert_id = str(ctx.author.id)
         try:
             if self.alert_manager.set_alert(alert_id, msg):
                 await ctx.message.add_reaction('✅')

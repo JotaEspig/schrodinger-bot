@@ -5,6 +5,7 @@ from discord.ext import tasks
 from modules.scripts.lessonsconfig import LessonManager
 from modules.scripts.alertsconfig import AlertManager
 from modules.cogs.bot import _commands_help
+import datetime
 
 
 class Lesson(commands.Cog):
@@ -22,17 +23,24 @@ class Lesson(commands.Cog):
             self.is_first_run = False
             return
 
+        now = datetime.datetime.now()
         all_lessons = self.lesson_manager.list_all_lessons()
         if len(all_lessons) > 0:
             for lesson in all_lessons:
-                guild_id = int(lesson.guild_id)
-                guild = self.client.get_guild(guild_id)
-                members = guild.members
-                for member in members:
-                    member_alert = self.alert_manager.get_alert(member.id)
-                    msg_to_send = member_alert.msg.replace("&alerta&", lesson)
-                    await member.send(msg_to_send)
-                    # TODO Improve this A LOT... This is a very bad look shit
+                lesson_date = datetime.datetime.strptime(lesson.lesson_date, "%Y-%m-%d")
+                lesson_time = datetime.datetime.strptime(lesson.lesson_time, "%H:%M:%S")
+                if lesson_date.date() == now.date():
+                    if lesson_time.hour == now.hour and lesson_time.minute == now.minute:
+                        guild_id = int(lesson.guild_id)
+                        guild = self.client.get_guild(guild_id)
+                        members = guild.members
+                        for member in members:
+                            member_alert = self.alert_manager.get_alert(member.id)
+                            if member_alert is not None:
+                                member_alert = f"\nAula: {member_alert.msg}"
+                                msg_to_send = member_alert.replace("&alerta&", str(lesson))
+                                await member.send(msg_to_send)
+                                # TODO Improve this A LOT... This is a very bad look shit
 
     @commands.command(aliases=['LIST_AULAS'])
     async def list_aulas(self, ctx) -> None:
