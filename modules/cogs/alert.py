@@ -17,16 +17,11 @@ class Alert(commands.Cog):
     @has_permissions(administrator=True)
     async def set_alerta(self, ctx, *, msg: str) -> None:
         alert_id = str(ctx.author.id)
-        try:
-            if self.alert_manager.set_alert(alert_id, msg):
-                await ctx.message.add_reaction('✅')
+        if self.alert_manager.set_alert(alert_id, msg):
+            await ctx.message.add_reaction('✅')
 
-            else:
-                await ctx.message.add_reaction('❌')
-
-        except Exception as error:
-            if error.args[0] == 'AM':
-                await ctx.send('Digite &alerta&')
+        else:
+            await ctx.message.add_reaction('❌')
 
     @set_alerta.error
     async def alerta_error(self, ctx, error) -> None:
@@ -34,7 +29,7 @@ class Alert(commands.Cog):
             await ctx.send(_commands_help['set_alerta'])
 
     @commands.command(aliases=['RM_ALERTA_AULA', 'rma_aula', 'RMA_AULA'])
-    @has_permissions(administrator= True)
+    @has_permissions(administrator=True)
     async def rm_alerta(self, ctx) -> None:
         alert_id = str(ctx.guild.id)
         if self.alert_manager.rm_alert(alert_id):

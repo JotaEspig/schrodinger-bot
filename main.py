@@ -48,7 +48,6 @@ async def load(ctx, extension: str) -> None:
     :param ctx: Context provided by Discord API
     :param extension: cog's name
     """
-
     client.load_extension(f'modules.cogs.{extension}')
     await ctx.send(f'\"{extension}\" carregado')
 
