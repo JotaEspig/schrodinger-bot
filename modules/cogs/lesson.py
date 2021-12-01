@@ -2,6 +2,7 @@
 import discord
 from discord.ext import commands
 from discord.ext import tasks
+from discord.ext.commands.errors import MissingPermissions
 # Modules
 from modules.scripts.lessonsconfig import LessonManager
 from modules.scripts.alertsconfig import AlertManager
@@ -55,7 +56,7 @@ class Lesson(commands.Cog):
             await ctx.send(f'{lesson.id}: {lesson}')
 
     @commands.command(aliases=['ADD_AULA'])
-    async def add_aula(self, ctx, subject: str, url: str, lesson_date: str, lesson_time: str) -> None:
+    async def add_aula(self, ctx, url: str, lesson_date: str, lesson_time: str, *, subject: str) -> None:
         try:
             if self.lesson_manager.add_lesson(subject, url, lesson_date, lesson_time, str(ctx.guild.id)):
                 await ctx.message.add_reaction('✅')
@@ -69,6 +70,11 @@ class Lesson(commands.Cog):
 
             elif error.args[0] == 'Invalid time format':
                 await ctx.send('Formato de horário inválido')
+
+    @add_aula.error
+    async def add_aula_error(self, ctx, error) -> None:
+        if not isinstance(error, MissingPermissions):
+            await ctx.send(_commands_help['add_aula'])
     
     @commands.command(aliases=['RM_AULA'])
     async def rm_aula(self, ctx, lesson_id: int) -> None:
