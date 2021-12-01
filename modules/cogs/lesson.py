@@ -1,4 +1,5 @@
 # Discord
+import discord
 from discord.ext import commands
 from discord.ext import tasks
 # Modules
@@ -30,17 +31,21 @@ class Lesson(commands.Cog):
                 lesson_date = datetime.datetime.strptime(lesson.lesson_date, "%Y-%m-%d")
                 lesson_time = datetime.datetime.strptime(lesson.lesson_time, "%H:%M:%S")
                 if lesson_date.date() == now.date():
-                    if lesson_time.hour == now.hour and lesson_time.minute == now.minute:
+                    if lesson_time.hour == now.hour and lesson_time.minute == (now.minute + 5):
                         guild_id = int(lesson.guild_id)
                         guild = self.client.get_guild(guild_id)
                         members = guild.members
                         for member in members:
                             member_alert = self.alert_manager.get_alert(member.id)
                             if member_alert is not None:
-                                member_alert = f"\nAula: {member_alert.msg}"
-                                msg_to_send = member_alert.replace("&alerta&", str(lesson))
-                                await member.send(msg_to_send)
-                                # TODO Improve this A LOT... This is a very bad look shit
+                                embed_var = discord.Embed(title=lesson.subject.capitalize(), color=0xFFA500)
+                                embed_var.add_field(name='Horário', value=lesson.lesson_time)
+                                embed_var.add_field(name='Data', value=lesson.lesson_date)
+                                embed_var.add_field(name='Link', value=lesson.url, inline=False)
+                                embed_var.set_footer(icon_url=self.client.user.avatar_url,
+                                                     text='Schrödinger Bot')
+                                await member.send(member_alert.msg)
+                                await member.send(embed=embed_var)
 
     @commands.command(aliases=['LIST_AULAS'])
     async def list_aulas(self, ctx) -> None:
@@ -61,6 +66,7 @@ class Lesson(commands.Cog):
         except Exception as error:
             if error.args[0] == 'Invalid date format':
                 await ctx.send('Formato de data inválido')
+
             elif error.args[0] == 'Invalid time format':
                 await ctx.send('Formato de horário inválido')
     
