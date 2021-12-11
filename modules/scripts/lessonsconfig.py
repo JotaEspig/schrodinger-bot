@@ -172,7 +172,8 @@ class LessonManager:
         lesson = Lesson(subject, url, lesson_date, lesson_time, guild_id)
         if lesson is not None:
             sql = f"""INSERT INTO lesson(subject, url, lessonDate, lessonTime, guildID) 
-            VALUES(\'{lesson.subject}\', \'{lesson.url}\', \'{lesson._lesson_date}\', \'{lesson._lesson_time}\', \'{lesson.guild_id}\')"""
+            VALUES(\'{lesson.subject}\', \'{lesson.url}\', \'{lesson.lesson_date}\', \'{lesson.lesson_time}\', 
+            \'{lesson.guild_id}\') """
             if self._con.manage(sql):
                 return True
         

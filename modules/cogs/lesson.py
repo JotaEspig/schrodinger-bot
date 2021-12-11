@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord.ext import tasks
 from discord.ext.commands.errors import MissingPermissions
 # Modules
+from modules.scripts import lessonsconfig
 from modules.scripts.lessonsconfig import LessonManager
 from modules.scripts.alertsconfig import AlertManager
 from modules.cogs.bot import _commands_help
@@ -19,6 +20,22 @@ class Lesson(commands.Cog):
         self.check_and_send.start()
         self.is_first_run = True
 
+    async def send_alert(self, lesson: lessonsconfig.Lesson) -> None:
+        guild_id = int(lesson.guild_id)
+        guild = self.client.get_guild(guild_id)
+        members = guild.members
+        for member in members:
+            member_alert = self.alert_manager.get_alert(member.id)
+            if member_alert is not None:
+                embed_var = discord.Embed(title=lesson.subject.capitalize(), color=0xFFA500)
+                embed_var.add_field(name='Horário', value=lesson.lesson_time)
+                embed_var.add_field(name='Data', value=lesson.lesson_date)
+                embed_var.add_field(name='Link', value=lesson.url, inline=False)
+                embed_var.set_footer(icon_url=self.client.user.avatar_url,
+                                     text='Schrödinger Bot')
+                await member.send(member_alert.msg)
+                await member.send(embed=embed_var)
+
     @tasks.loop(minutes=1)
     async def check_and_send(self) -> None:
         if self.is_first_run:
@@ -33,20 +50,18 @@ class Lesson(commands.Cog):
                 lesson_time = datetime.datetime.strptime(lesson.lesson_time, "%H:%M:%S")
                 if lesson_date.date() == now.date():
                     if lesson_time.hour == now.hour and lesson_time.minute == (now.minute + 5):
-                        guild_id = int(lesson.guild_id)
-                        guild = self.client.get_guild(guild_id)
-                        members = guild.members
-                        for member in members:
-                            member_alert = self.alert_manager.get_alert(member.id)
-                            if member_alert is not None:
-                                embed_var = discord.Embed(title=lesson.subject.capitalize(), color=0xFFA500)
-                                embed_var.add_field(name='Horário', value=lesson.lesson_time)
-                                embed_var.add_field(name='Data', value=lesson.lesson_date)
-                                embed_var.add_field(name='Link', value=lesson.url, inline=False)
-                                embed_var.set_footer(icon_url=self.client.user.avatar_url,
-                                                     text='Schrödinger Bot')
-                                await member.send(member_alert.msg)
-                                await member.send(embed=embed_var)
+                        await self.send_alert(lesson)
+                        continue
+
+                    if now.minute + 30 < 60:
+                        if lesson_time.hour == now.hour and lesson_time.minute == (now.minute + 30):
+                            await self.send_alert(lesson)
+                            self.lesson_manager.rm_lesson(lesson.id)
+
+                    else:
+                        minutes = (now.minute + 30) - 60
+                        if lesson_time.hour == now.hour + 1 and lesson_time.minute == minutes:
+                            await self.send_alert(lesson)
 
     @commands.command(aliases=['LIST_AULAS'])
     async def list_aulas(self, ctx) -> None:
