@@ -63,6 +63,21 @@ class Lesson(commands.Cog):
                         if lesson_time.hour == now.hour + 1 and lesson_time.minute == minutes:
                             await self.send_alert(lesson)
 
+    @commands.command(aliases=['GET_AULA'])
+    async def get_aula(self, ctx, *, lesson_id) -> None:
+        lesson = self.lesson_manager.get_lesson(lesson_id)
+        if lesson is not None:
+            embed_var = discord.Embed(title=lesson.subject.capitalize(), color=0xFFA500)
+            embed_var.add_field(name='Horário', value=lesson.lesson_time)
+            embed_var.add_field(name='Data', value=lesson.lesson_date)
+            embed_var.add_field(name='Link', value=lesson.url, inline=False)
+            embed_var.set_footer(icon_url=self.client.user.avatar_url,
+                                 text='Schrödinger Bot')
+            await ctx.send(embed=embed_var)
+
+        else:
+            await ctx.send("Nenhuma aula encontrada com esse ID")
+
     @commands.command(aliases=['LIST_AULAS'])
     async def list_aulas(self, ctx) -> None:
         guild_id = str(ctx.guild.id)
@@ -71,6 +86,7 @@ class Lesson(commands.Cog):
             await ctx.send(f'{lesson.id}: {lesson}')
 
     @commands.command(aliases=['ADD_AULA'])
+    @commands.has_permissions(administrator=True)
     async def add_aula(self, ctx, url: str, lesson_date: str, lesson_time: str, *, subject: str) -> None:
         try:
             if self.lesson_manager.add_lesson(subject, url, lesson_date, lesson_time, str(ctx.guild.id)):
@@ -92,12 +108,18 @@ class Lesson(commands.Cog):
             await ctx.send(_commands_help['add_aula'])
     
     @commands.command(aliases=['RM_AULA'])
+    @commands.has_permissions(administrator=True)
     async def rm_aula(self, ctx, lesson_id: int) -> None:
         if self.lesson_manager.rm_lesson(lesson_id):
             await ctx.message.add_reaction('✅')
             
         else:
             await ctx.message.add_reaction('❌')
+
+    @rm_aula.error
+    async def rm_aula_error(self, ctx, error) -> None:
+        if not isinstance(error, MissingPermissions):
+            await ctx.send(_commands_help['rm_aula'])
 
 
 def setup(client) -> None:
