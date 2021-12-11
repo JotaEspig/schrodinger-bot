@@ -42,12 +42,7 @@ class ActivityManager:
     """
 
     def __init__(self) -> None:
-        self._con = Connection(
-            'localhost',
-            'botschrodinger',
-            'postgres',
-            'postgres'
-        )
+        self._con = Connection()
 
     def check_guild_id(self, guild_id: str) -> bool:
         """

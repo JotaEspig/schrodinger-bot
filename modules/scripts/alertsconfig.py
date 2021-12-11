@@ -32,12 +32,7 @@ class AlertManager:
     """Manage the alerts
     """
     def __init__(self) -> None:
-        self._con = Connection(
-            'localhost',
-            'botschrodinger',
-            'postgres',
-            'postgres'
-        )
+        self._con = Connection()
 
     def get_alert(self, alert_id: str) -> Alert:
         """Gets an alert from the database
