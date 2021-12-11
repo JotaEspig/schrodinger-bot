@@ -1,5 +1,4 @@
 # Standard Libraries
-import json
 from os import listdir
 
 # Discord
@@ -7,11 +6,9 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import MissingPermissions
 
+# Modules
+from config import TOKEN, PREFIX
 
-# Defines the token and the prefix
-with open('config.json', 'r') as file:
-    config = json.load(file)
-    TOKEN, PREFIX = config['token'], config['prefix']
 
 # Configures the Bot
 intents = discord.Intents(
