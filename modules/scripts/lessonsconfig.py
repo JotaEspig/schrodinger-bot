@@ -99,7 +99,6 @@ class LessonManager:
 
         :return: a object of the class "Lesson" or None
         """
-        lesson_id = int(lesson_id)
         response = self._con.consult(f'SELECT * FROM lesson WHERE lessonID={lesson_id}')
         if len(response) > 0:
             info = response[0]
@@ -108,6 +107,13 @@ class LessonManager:
             return lesson
 
     def list_lessons(self, guild_id: str) -> list[Lesson] | None:
+        """Gets all the guild's lessons from the database
+
+        :param guild_id: Guild's ID
+        :type guild_id: str
+
+        :return: A list of lessons or None
+        """
         if not self.check_guild_id(guild_id):
             return None
 
@@ -121,6 +127,10 @@ class LessonManager:
         return response
 
     def list_all_lessons(self) -> list[Lesson] | None:
+        """Gets all the lessons from the database
+
+        :return: A list of lessons or None
+        """
         response = self._con.consult(f'SELECT * FROM lesson')
         for index, info in enumerate(response):
             lesson = Lesson(info[1], info[2], info[3], info[4], info[5])
@@ -178,6 +188,3 @@ class LessonManager:
                 return True
         
         return False
-
-    def update_lesson(self, lesson_id, subject: str, url: str, lesson_date: str, lesson_time: str) -> bool:
-        raise NotImplementedError()  # TODO implement update_lesson
