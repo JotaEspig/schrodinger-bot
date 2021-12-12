@@ -135,18 +135,20 @@ class LessonManager:
 
         return response
     
-    def rm_lesson(self, lesson_id: int) -> bool:
+    def rm_lesson(self, lesson_id: int, guild_id: int) -> bool:
         """Removes a lesson from the database
 
         :param lesson_id: lesson's ID
         :type lesson_id: int
+        :param guild_id: guild's ID
+        :type guild_id: int
 
         :return: True or false
         """
         lesson_id = int(lesson_id)
         lesson = LessonManager.get_lesson(self, lesson_id)
         if lesson is not None:
-            sql = f'DELETE FROM lesson WHERE lessonID=\'{lesson_id}\''
+            sql = f'DELETE FROM lesson WHERE lessonID=\'{lesson_id}\' AND \'{guild_id}\''
             if self._con.manage(sql):
                 return True
 

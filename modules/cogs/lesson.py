@@ -56,7 +56,7 @@ class Lesson(commands.Cog):
                     if now.minute + 30 < 60:
                         if lesson_time.hour == now.hour and lesson_time.minute == (now.minute + 30):
                             await self.send_alert(lesson)
-                            self.lesson_manager.rm_lesson(lesson.id)
+                            self.lesson_manager.rm_lesson(lesson.id, lesson.guild_id)
 
                     else:
                         minutes = (now.minute + 30) - 60
@@ -67,16 +67,17 @@ class Lesson(commands.Cog):
     async def get_aula(self, ctx, *, lesson_id) -> None:
         lesson = self.lesson_manager.get_lesson(lesson_id)
         if lesson is not None:
-            embed_var = discord.Embed(title=lesson.subject.capitalize(), color=0xFFA500)
-            embed_var.add_field(name='Horário', value=lesson.lesson_time)
-            embed_var.add_field(name='Data', value=lesson.lesson_date)
-            embed_var.add_field(name='Link', value=lesson.url, inline=False)
-            embed_var.set_footer(icon_url=self.client.user.avatar_url,
-                                 text='Schrödinger Bot')
-            await ctx.send(embed=embed_var)
+            if int(lesson.guild_id) == int(ctx.guild.id):
+                embed_var = discord.Embed(title=lesson.subject.capitalize(), color=0xFFA500)
+                embed_var.add_field(name='Horário', value=lesson.lesson_time)
+                embed_var.add_field(name='Data', value=lesson.lesson_date)
+                embed_var.add_field(name='Link', value=lesson.url, inline=False)
+                embed_var.set_footer(icon_url=self.client.user.avatar_url,
+                                     text='Schrödinger Bot')
+                await ctx.send(embed=embed_var)
+                return
 
-        else:
-            await ctx.send("Nenhuma aula encontrada com esse ID")
+        await ctx.send("Nenhuma aula encontrada com esse ID")
 
     @commands.command(aliases=['LIST_AULAS'])
     async def list_aulas(self, ctx) -> None:
@@ -110,7 +111,7 @@ class Lesson(commands.Cog):
     @commands.command(aliases=['RM_AULA'])
     @commands.has_permissions(administrator=True)
     async def rm_aula(self, ctx, lesson_id: int) -> None:
-        if self.lesson_manager.rm_lesson(lesson_id):
+        if self.lesson_manager.rm_lesson(lesson_id, ctx.guild.id):
             await ctx.message.add_reaction('✅')
             
         else:
