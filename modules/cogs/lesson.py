@@ -51,12 +51,13 @@ class Lesson(commands.Cog):
                 if lesson_date.date() == now.date():
                     if lesson_time.hour == now.hour and lesson_time.minute == (now.minute + 5):
                         await self.send_alert(lesson)
+                        self.lesson_manager.rm_lesson(lesson.id, lesson.guild_id)
                         continue
 
                     if now.minute + 30 < 60:
                         if lesson_time.hour == now.hour and lesson_time.minute == (now.minute + 30):
                             await self.send_alert(lesson)
-                            self.lesson_manager.rm_lesson(lesson.id, lesson.guild_id)
+
 
                     else:
                         minutes = (now.minute + 30) - 60
