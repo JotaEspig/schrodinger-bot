@@ -122,7 +122,7 @@ class ActivityManager:
         activity_id = int(activity_id)
         activity = ActivityManager.get_activity(self, activity_id)
         if activity is not None:
-            sql = f'DELETE FROM activity WHERE lessonID=\'{activity_id}\' AND guildID=\'{guild_id}\''
+            sql = f'DELETE FROM activity WHERE activityID=\'{activity_id}\' AND guildID=\'{guild_id}\''
             if self._con.manage(sql):
                 return True
 
@@ -150,7 +150,7 @@ class ActivityManager:
 
         activity = Activity(subject, deadline, title, guild_id)
         if activity is not None:
-            sql = f"""INSERT INTO activity(subject, url, lessonDate, lessonTime, guildID) 
+            sql = f"""INSERT INTO activity(subject, deadline, title, guildID) 
             VALUES(\'{activity.subject}\', \'{activity.deadline}\', \'{activity.title}\', \'{activity.guild_id}\')"""
             if self._con.manage(sql):
                 return True
