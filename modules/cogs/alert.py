@@ -14,7 +14,6 @@ class Alert(commands.Cog):
         self.alert_manager = AlertManager()
         
     @commands.command(aliases=['SET_ALERTA'])
-    @has_permissions(administrator=True)
     async def set_alerta(self, ctx, *, msg: str) -> None:
         alert_id = str(ctx.author.id)
         if self.alert_manager.set_alert(alert_id, msg):
@@ -28,8 +27,7 @@ class Alert(commands.Cog):
         if not isinstance(error, MissingPermissions):
             await ctx.send(_commands_help['set_alerta'])
 
-    @commands.command(aliases=['RM_ALERTA_AULA', 'rma_aula', 'RMA_AULA'])
-    @has_permissions(administrator=True)
+    @commands.command(aliases=['RM_ALERTA'])
     async def rm_alerta(self, ctx) -> None:
         alert_id = str(ctx.guild.id)
         if self.alert_manager.rm_alert(alert_id):
