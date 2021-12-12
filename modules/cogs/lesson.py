@@ -84,8 +84,15 @@ class Lesson(commands.Cog):
     async def list_aulas(self, ctx) -> None:
         guild_id = str(ctx.guild.id)
         response = self.lesson_manager.list_lessons(guild_id)
+        if len(response) < 1:
+            await ctx.send("Nenhuma aula cadastrada")
+            return
+
+        embed_var = discord.Embed(title="Aulas marcadas", color=0xFFA500)
         for lesson in response:
-            await ctx.send(f'{lesson.id}: {lesson}')
+            embed_var.add_field(name=lesson.id, value=f"{lesson.subject} : {lesson.lesson_date}", inline=False)
+
+        await ctx.send(embed=embed_var)
 
     @commands.command(aliases=['ADD_AULA'])
     @commands.has_permissions(administrator=True)
