@@ -148,7 +148,7 @@ class LessonManager:
         lesson_id = int(lesson_id)
         lesson = LessonManager.get_lesson(self, lesson_id)
         if lesson is not None:
-            sql = f'DELETE FROM lesson WHERE lessonID=\'{lesson_id}\' AND \'{guild_id}\''
+            sql = f'DELETE FROM lesson WHERE lessonID=\'{lesson_id}\' AND guildID=\'{guild_id}\''
             if self._con.manage(sql):
                 return True
 
