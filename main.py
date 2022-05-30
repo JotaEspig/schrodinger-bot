@@ -1,105 +1,118 @@
-#Standart Libraries
-import json
+# Standard Libraries
 from os import listdir
 
-#Discord
+# Discord
 import discord
 from discord.ext import commands
 from discord.ext.commands import MissingPermissions
 
-
-#Defines the token and the prefix
-with open('config.json') as file:
-    config = json.load(file)
-    TOKEN, PREFIX = config['token'], config['prefix']
+# Modules
+from config import TOKEN, PREFIX
 
 
-#Configure the Bot
+# Configures the Bot
 intents = discord.Intents(
-    messages = True,
-    guilds = True,
-    reactions = True,
-    members = True,
-    presences = True
+    messages=True,
+    guilds=True,
+    reactions=True,
+    members=True,
+    presences=True
 )
-client = commands.Bot(command_prefix= PREFIX, intents= intents)
+client = commands.Bot(command_prefix=PREFIX, intents=intents)
 
-def is_it_me(ctx) -> bool:
-    """Verifica se o autor da mensagem é um dos donos do BOT
 
-    Args:
-        ctx (discord.ext.commands.context.Context): Contexto passado pela API do discord
+def is_owner(ctx) -> bool:
+    """
+    Checks if the author of the message is one of the owners of the Bot
 
-    Returns:
-        bool: True se o id do autor da mensagem é igual a um dos donos
+    :param ctx: Context provided by Discord API
     """
     owners = [
-        720686657950711909,
-        621048999989870592,
-        335554042736541698
+        720686657950711909,  # JVE
+        621048999989870592,  # IG
+        335554042736541698,  # FJH
+        609516579549347863   # LRB
     ]
     return ctx.author.id in owners
 
-@client.command(aliases= ['LOAD'])
-@commands.check(is_it_me)
-async def load(ctx, extension: str) -> None:
-    """Habilita um cog do BOT
 
-    Args:
-        ctx (discord.ext.commands.context.Context): Contexto passado pela API do discord
-        extension (str): Nome do arquivo do cog
+@client.command(aliases=['LOAD'])
+@commands.check(is_owner)
+async def load(ctx, extension: str) -> None:
     """
-    client.load_extension(f'cogs.{extension}')
+    Enables a bot's cog
+
+    :param ctx: Context provided by Discord API
+    :param extension: cog's name
+    """
+    client.load_extension(f'modules.cogs.{extension}')
     await ctx.send(f'\"{extension}\" carregado')
 
-@client.command(aliases= ['UNLOAD'])
-@commands.check(is_it_me)
-async def unload(ctx, extension: str) -> None:
-    """Desabilita um cog do BOT
 
-    Args:
-        ctx (discord.ext.commands.context.Context): Contexto passado pela API do discord
-        extension (str): Nome do arquivo do cog
+@client.command(aliases=['UNLOAD'])
+@commands.check(is_owner)
+async def unload(ctx, extension: str) -> None:
+    """Disables a bot's cog
+
+    :param ctx: Context provided by Discord API
+    :param extension: cog's name
     """
-    client.unload_extension(f'cogs.{extension}')
+    client.unload_extension(f'modules.cogs.{extension}')
     await ctx.send(f'\"{extension}\" descarregado')
 
-@client.command(aliases= ['RELOAD'])
-@commands.check(is_it_me)
-async def reload(ctx, extension: str) -> None:
-    """Reinicia um cog do BOT
 
-    Args:
-        ctx (discord.ext.commands.context.Context): Contexto passado pela API do discord
-        extension (str): Nome do arquivo do cog
+@client.command(aliases=['RELOAD'])
+@commands.check(is_owner)
+async def reload(ctx, extension: str) -> None:
+    """Reloads a bot's cog
+
+    :param ctx: Context provided by Discord API
+    :param extension: cog's name
     """
-    client.unload_extension(f'cogs.{extension}')
-    client.load_extension(f'cogs.{extension}')
+    client.unload_extension(f'modules.cogs.{extension}')
+    client.load_extension(f'modules.cogs.{extension}')
     await ctx.send(f'\"{extension}\" recarregado')
 
-#Load em todos os cog automaticamente
-for filename in listdir('./scripts/cogs'):
-    if filename.endswith('.py'):
-        client.load_extension(f'scripts.cogs.{filename[:-3]}')
 
-#-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
-#Runs the bot
+@client.command(aliases=['stop', 'STOP', 'logout', 'LOGOUT', 'SHUTDOWN'])
+@commands.check(is_owner)
+async def shutdown(ctx) -> None:
+    """Logouts the bot
+
+    :param ctx: Context provided by Discord API
+    """
+    await ctx.message.add_reaction('✅')
+    await client.close()
+
+
+# -X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
+# Runs the bot
 @client.event
 async def on_command_error(ctx, error) -> None:
-    """Trata dos erros que acontecem durante o funcionamento do BOT
+    """Treats the errors that happen during the operation of the bot
 
-    Args:
-        ctx (discord.ext.commands.context.Context): Contexto passado pela API do discord
-        error: Erro ocorrido
+    :param ctx: Context provided by Discord API
+    :param error: Error
     """
     if isinstance(error, MissingPermissions):
-        await ctx.send(f':hand_splayed: Você não tem permissão para usar esse comando\n:hand_splayed: {error}') 
+        await ctx.send(f':hand_splayed: Você não tem permissão para usar esse comando\n:hand_splayed: {error}')
+
 
 @client.event
 async def on_ready() -> None:
-    """Comandos executados quando o BOT fica online
-    """
     print(f'{client.user.name} online')
-    await client.change_presence(activity= discord.Activity(type= discord.ActivityType.listening, name= f'{PREFIX}help'))
+    await client.change_presence(
+        activity=discord.Activity(
+            type=discord.ActivityType.listening,
+            name=f'{PREFIX}help'
+        )
+    )
 
-client.run(TOKEN)
+
+if __name__ == '__main__':
+    # Load all cogs automatically
+    for filename in listdir('./modules/cogs'):
+        if filename.endswith('.py'):
+            client.load_extension(f'modules.cogs.{filename[:-3]}')
+
+    client.run(TOKEN)

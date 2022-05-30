@@ -1,5 +1,5 @@
-#Modules
-from scripts.modules.database import Connection
+# Modules
+from modules.scripts.database import Connection
 
 
 class Alert:
@@ -11,42 +11,36 @@ class Alert:
     @property
     def _msg(self) -> str:
         return self.msg
+
     @_msg.setter
     def _msg(self, value: str) -> None:
         value = value.strip()
-        if value == 'none':
-            value = '&alerta&'
-        if '&alerta&' not in value:
-            raise Exception('AM')
-
         self.msg = value
 
     def __eq__(self, obj: object) -> bool:
-        return self.alert_id == obj.lesson_id
+        if self.__class__ == obj.__class__:
+            return self.alert_id == obj.lesson_id
+
+        else:
+            return self.alert_id == obj
 
     def __repr__(self) -> str:
-        return f'id:{self.alert_id}'
+        return f'<id:{self.alert_id} | message:{self.msg}>'
 
 
 class AlertManager:
-    """Gerencia os alertas do sistema
+    """Manage the alerts
     """
     def __init__(self) -> None:
-        self._con = Connection(
-            'localhost',
-            'botschrodinger',
-            'postgres',
-            'postgres'
-        )
+        self._con = Connection()
 
     def get_alert(self, alert_id: str) -> Alert:
-        """Retorna um alerta existente no banco de dados
+        """Gets an alert from the database
 
-        Args:
-            alert_id (str): Id do alerta
+        :param alert_id: alert's ID
+        :type alert_id: str
 
-        Returns:
-            Alert: Objeto de classe Alert ou None
+        :return: object of the class "alert" or None
         """
         alert_id = str(alert_id)
         response = self._con.consult(f'SELECT * FROM alert WHERE alertID=\'{alert_id}\'')
@@ -56,13 +50,12 @@ class AlertManager:
             return alert
 
     def rm_alert(self, alert_id: str) -> bool:
-        """Remove o alerta do banco de dados
+        """Remove the alert from the database
 
-        Args:
-            alert_id (str): Id do alerta
+        :param alert_id: alert's ID
+        :type alert_id: str
 
-        Returns:
-            bool: True ou False
+        :return: True or False
         """
         alert_id = str(alert_id)
         alert = AlertManager.get_alert(self, alert_id)
@@ -77,21 +70,21 @@ class AlertManager:
         return True
 
     def set_alert(self, alert_id: str, msg: str) -> bool:
-        """Configura um alerta para o servidor ou usuário
+        """Sets an alert for a server or a user
 
-        Args:
-            alert_id (str): Id do alerta
-            msg (str): Mensagem que irá ser cadastrada, precisa conter a palavra \"&alerta&\" (é onde as variáveis do alerta vão ir) ou \"none\" (configura a mensagem para o padrão)
+        :param alert_id: alert's ID.
+        :type alert_id: str
+        :param msg: The message that will be registered, needs to have the word
+        "&alerta&" (it's the location that the alert object will be). If you want to reset your alert, write: "none"
+        :type msg: str
 
-        Returns:
-            bool: True ou False
+        :return: True or false
         """
         alert_id = str(alert_id)
         alert = Alert(alert_id, msg)
         if alert is not None:
             if AlertManager.rm_alert(self, alert.alert_id):
                 sql = f'INSERT INTO alert(alertID, msg) VALUES(\'{alert.alert_id}\', \'{alert.msg}\')'
-                if self._con.manage(sql):
-                    return True
+                return self._con.manage(sql)
 
         return False
